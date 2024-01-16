@@ -6,7 +6,7 @@ from time import sleep
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
-bot=telebot.TeleBot("5818205719:AAHk-liE0DD4S5ltg-kFN88Ckn4CTBUmMNc")
+bot=telebot.TeleBot(os.environ["token"])
 diccionario={}
 
 
@@ -39,7 +39,7 @@ def obtener_memes():
 
 
 def publicar(diccionario, user):
-    target=1413725506 #reemplazar este valor con el chat id del destino
+    target=-1001161864648 #reemplazar este valor con el chat id del destino
     for e, i in enumerate(diccionario, start=1):
         res=requests.get(diccionario[e][0], headers=user)
         
