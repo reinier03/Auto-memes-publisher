@@ -52,7 +52,7 @@ def publicar(diccionario, user):
             archivo_escritura.write(res.content)
             
         archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
-        archivo=easy_bot_reima.discord.File(archivo_lectura)
+        archivo=discord.File(archivo_lectura)
         canal.send(f"{diccionario[e][1]}",file=archivo) 
                 
         archivo_lectura.close()
