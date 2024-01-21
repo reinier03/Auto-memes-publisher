@@ -62,9 +62,9 @@ def publicar(diccionario, user):
             
                 
 @client.event
-def on_ready():
+async def on_ready():
     while True:
-        obtener_memes()
+        await obtener_memes()
 
 
 
