@@ -1,7 +1,7 @@
 import os
 import requests
 from bs4 import BeautifulSoup as bs
-from time import sleep
+import time
 import discord
 import threading
 
@@ -45,19 +45,24 @@ def obtener_memes():
 
 def publicar(diccionario, user):
     canal=client.get_channel(1189687855774191687) #reemplazar este valor con el chat id del destino
+    tiempo=time.localtime()
     for e, i in enumerate(diccionario, start=1):
-        res=requests.get(diccionario[e][0], headers=user)
-        
-        with open(f"{os.path.basename(diccionario[e][0])}", "wb") as archivo_escritura:
-            archivo_escritura.write(res.content)
+        if not time.localtime() >=  tiempo:
+            time.sleep(60)
+            continue
+        else:
+            res=requests.get(diccionario[e][0], headers=user)
             
-        archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
-        archivo=discord.File(archivo_lectura)
-        canal.send(f"{diccionario[e][1]}",file=archivo) 
+            with open(f"{os.path.basename(diccionario[e][0])}", "wb") as archivo_escritura:
+                archivo_escritura.write(res.content)
                 
-        archivo_lectura.close()
-        os.remove(os.path.basename(diccionario[e][0]))
-        sleep(1800)
+            archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
+            archivo=discord.File(archivo_lectura)
+            canal.send(f"{diccionario[e][1]}",file=archivo) 
+                    
+            archivo_lectura.close()
+            os.remove(os.path.basename(diccionario[e][0]))
+            tiempo=time.localtime(time.time()+1800)
     return
             
                 
