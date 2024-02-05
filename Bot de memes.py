@@ -49,9 +49,9 @@ def publicar(diccionario, user):
         archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
         archivo_lectura.seek(0)
         if os.path.basename(diccionario[e][0]).split('.')[-1] == "jpeg":
-            bot.send_photo(-1002056657764, photo=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting")
+            bot.send_photo(-1001161864648, photo=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting")
         else:
-            bot.send_document(-1002056657764, document=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
+            bot.send_document(-1001161864648, document=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
                 
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
