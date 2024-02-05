@@ -79,7 +79,7 @@ def flask():
         return f'¡Hola! Esta es la dirección local del host: {host_url}'
 
     if __name__ == '__main__':
-        app.run(host="0.0.0.0", port=os.environ["PORT"])
+        app.run(host="0.0.0.0", port=5000)
 
 
 for i in threading.enumerate():
