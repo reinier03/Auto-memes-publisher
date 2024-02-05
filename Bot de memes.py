@@ -47,10 +47,11 @@ def publicar(diccionario, user):
             archivo_escritura.write(res.content)
             
         archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
+        archivo_lectura.seek(0)
         if os.path.basename(diccionario[e][0]).split('.')[-1] == "jpeg":
-            bot.send_photo(target, photo=archivo_lectura, caption=diccionario[e][1])
+            bot.send_photo(-1002056657764, photo=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting")
         else:
-            bot.send_document(target, document=archivo_lectura, caption=diccionario[e][1])
+            bot.send_document(-1002056657764, document=archivo_lectura, caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
                 
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
@@ -62,7 +63,7 @@ def publicar(diccionario, user):
                 
 obtener_memes()
 
-bot.infinity_polling()
+bot.polling()
     
     
     
