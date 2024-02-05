@@ -73,7 +73,7 @@ if not threading.active_count() > 4:
 def flask():
     app = Flask(__name__)
 
-    @app.route('/')
+    @app.route('/', methods=['POST'])
     def index():
         host_url = request.host_url
         return f'¡Hola! Esta es la dirección local del host: {host_url}'
@@ -82,6 +82,12 @@ def flask():
         app.run(host="0.0.0.0", port=5000)
 
 
+for i in threading.enumerate():
+    if "hilo_flask" in str(i):
+        break
+else:
+    hilo_flask=threading.Thread(name="hilo_flask", target=flask)
+    hilo_flask.start()
 
 bot.polling()
     
