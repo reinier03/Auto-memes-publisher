@@ -7,26 +7,11 @@ import threading
 from flask import Flask, request
 
 
-
-
-
-
-
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
 bot=telebot.TeleBot(os.environ['token'])
 diccionario={}
 
-bot.remove_webhook()
-time.sleep(1)
 
-app = Flask(__name__)
-
-@app.route('/', methods=['POST'])
-def index():
-    if request.headers.get("content-type") == "application/json":
-        update=telebot.Update.de_json(request.stream.read().decode("utf-8"))
-        bot.process_new_updates([update])
-        return "OK", 200
 
 def obtener_memes():
     global diccionario
@@ -85,20 +70,23 @@ if not threading.active_count() > 4:
 
 
 
+def flask():
+    app = Flask(__name__)
+
+    @app.route('/', methods=['GET'])
+    def index():
+        host_url = request.host_url
+        return f'¡Hola! Esta es la dirección local del host: {host_url}'
+
+    if __name__ == '__main__':
+        app.run(host="0.0.0.0", port=5000)
 
 
-def arrancar():
-    bot.remove_webhook()
-    time.sleep(1)
-    bot.set_webhook(url="https://api.render.com/deploy/srv-cn05gj7109ks73bebi1g?key=N8ahvwcceCA")
-    app.run(host="0.0.0.0", port=5000)
-
-    
 for i in threading.enumerate():
     if "hilo_flask" in str(i):
         break
 else:
-    hilo_flask=threading.Thread(name="hilo_flask", target=arrancar)
+    hilo_flask=threading.Thread(name="hilo_flask", target=flask)
     hilo_flask.start()
 
 bot.polling()
