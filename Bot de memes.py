@@ -2,12 +2,14 @@ import os
 import requests
 from bs4 import BeautifulSoup as bs
 import telebot
-from time import sleep
+import time
+import threading
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
 bot=telebot.TeleBot(os.environ["token"])
 diccionario={}
+
 
 
 def obtener_memes():
@@ -55,13 +57,16 @@ def publicar(diccionario, user):
                 
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
-        sleep(1800)
+        print(f"Ya publiqué, procedo a dormir {time.strftime('%H:%M', time.localtime())}")
+        time.sleep(1800)
     return
             
                 
-                
-                
-obtener_memes()
+
+if not threading.active_count() > 4:           
+    hilo=threading.Thread(name="hilo", target=obtener_memes)
+    hilo.start()
+
 
 bot.polling()
     
