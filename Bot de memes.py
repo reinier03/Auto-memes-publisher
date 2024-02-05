@@ -82,12 +82,6 @@ def flask():
         app.run(host="0.0.0.0", port=5000)
 
 
-for i in threading.enumerate():
-    if "hilo_flask" in str(i):
-        break
-else:
-    hilo_flask=threading.Thread(name="hilo_flask", target=flask)
-    hilo_flask.start()
 
 bot.polling()
     
