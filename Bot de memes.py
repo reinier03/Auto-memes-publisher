@@ -70,18 +70,18 @@ if not threading.active_count() > 4:
 
 
 
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET'])
+def index():
+    host_url = request.host_url
+    return f'¡Hola! Esta es la dirección local del host: {host_url}'
+
 def flask():
     bot.remove_webhook()
     time.sleep(1)
-    app = Flask(__name__)
-
-    @app.route('/', methods=['GET'])
-    def index():
-        host_url = request.host_url
-        return f'¡Hola! Esta es la dirección local del host: {host_url}'
-
-    if __name__ == '__main__':
-        app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=5000)
 
 
 for i in threading.enumerate():
