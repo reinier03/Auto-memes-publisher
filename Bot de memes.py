@@ -8,6 +8,17 @@ from flask import Flask, request
 
 
 
+
+
+
+
+user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
+bot=telebot.TeleBot(os.environ['token'])
+diccionario={}
+
+bot.remove_webhook()
+time.sleep(1)
+
 app = Flask(__name__)
 
 @app.route('/', methods=['POST'])
@@ -16,13 +27,6 @@ def index():
         update=telebot.Update.de_json(request.stream.read().decode("utf-8"))
         bot.process_new_updates([update])
         return "OK", 200
-
-
-user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
-bot=telebot.TeleBot(os.environ['token'])
-diccionario={}
-
-
 
 def obtener_memes():
     global diccionario
@@ -86,8 +90,8 @@ if not threading.active_count() > 4:
 def arrancar():
     bot.remove_webhook()
     time.sleep(1)
-    bot.set_webhook(url=f"https://api.render.com/deploy/srv-cn05gj7109ks73bebi1g?key=N8ahvwcceCA")
-    app.run(host="0.0.0.0", port=os.environ["PORT"])
+    bot.set_webhook(url="https://api.render.com/deploy/srv-cn05gj7109ks73bebi1g?key=N8ahvwcceCA")
+    app.run(host="0.0.0.0", port=5000)
 
     
 for i in threading.enumerate():
