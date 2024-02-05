@@ -4,10 +4,11 @@ from bs4 import BeautifulSoup as bs
 import telebot
 import time
 import threading
+from flask import Flask, request
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
-bot=telebot.TeleBot(os.environ["token"])
+bot=telebot.TeleBot("6718171248:AAHg5MHCz-ES4L8CAAxN4WuWKRfTPwVX8KM")
 diccionario={}
 
 
@@ -67,6 +68,26 @@ if not threading.active_count() > 4:
     hilo=threading.Thread(name="hilo", target=obtener_memes)
     hilo.start()
 
+
+
+def flask():
+    app = Flask(__name__)
+
+    @app.route('/')
+    def index():
+        host_url = request.host_url
+        return f'¡Hola! Esta es la dirección local del host: {host_url}'
+
+    if __name__ == '__main__':
+        app.run(host="0.0.0.0", port=5000)
+
+
+for i in threading.enumerate():
+    if "hilo_flask" in str(i):
+        break
+else:
+    hilo_flask=threading.Thread(name="hilo_flask", target=flask)
+    hilo_flask.start()
 
 bot.polling()
     
