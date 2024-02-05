@@ -8,7 +8,7 @@ from flask import Flask, request
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
-bot=telebot.TeleBot("6718171248:AAHg5MHCz-ES4L8CAAxN4WuWKRfTPwVX8KM")
+bot=telebot.TeleBot(os.environ['token'])
 diccionario={}
 
 
@@ -79,7 +79,7 @@ def flask():
         return f'¡Hola! Esta es la dirección local del host: {host_url}'
 
     if __name__ == '__main__':
-        app.run(host="0.0.0.0", port=5000)
+        app.run(host="0.0.0.0", port=os.environ["PORT"])
 
 
 for i in threading.enumerate():
