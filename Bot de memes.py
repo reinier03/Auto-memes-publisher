@@ -71,6 +71,8 @@ if not threading.active_count() > 4:
 
 
 def flask():
+    bot.remove_webhook()
+    time.sleep(1)
     app = Flask(__name__)
 
     @app.route('/', methods=['GET'])
