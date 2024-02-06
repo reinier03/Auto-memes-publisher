@@ -18,7 +18,7 @@ def obtener_memes():
     global user
     contador=0
     diccionario.clear()
-    while not len(diccionario)>=48:
+    while not len(diccionario)>=72:
         contador+=1
         res=requests.get(f"https://es.memedroid.com/memes/random?page={contador}", headers=user)
         soup=bs(res.text, features="html.parser")
@@ -59,8 +59,8 @@ def publicar(diccionario, user):
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
         print(f"Ya publiqué, procedo a dormir {time.strftime('%H:%M', time.localtime())}")
-        time.sleep(1800)
-    return
+        time.sleep(1.200)
+    return obtener_memes()
             
                 
 
