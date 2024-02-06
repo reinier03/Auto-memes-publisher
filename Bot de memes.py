@@ -59,7 +59,7 @@ def publicar(diccionario, user):
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
         print(f"Ya publiqué, procedo a dormir {time.strftime('%H:%M', time.localtime())}")
-        time.sleep(1.200)
+        time.sleep(1200)
     return obtener_memes()
             
                 
