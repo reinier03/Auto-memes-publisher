@@ -104,7 +104,7 @@ def cmd_canal_destino(message):
     if not message.chat.id==reima:
         bot.send_message(reima, "No eres mi creador como para decirme qué hacer >:)")
         return
-    msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es {bot.get_chat(target)}\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
+    msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es {bot.get_chat(target).username}.username\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
     bot.register_next_step_handler(msg, registrar_canal)
 
 def registrar_canal(message):
@@ -114,7 +114,7 @@ def registrar_canal(message):
     else:
         canal=message.text
     try:    
-        bot.get_chat(canal).id
+        bot.get_chat(canal)
     except:
         bot.send_message(reima, "Ni siquiera estoy en el canal!, Úneme como admin y prueba de nuevo!")
         return
@@ -129,7 +129,7 @@ def registrar_canal(message):
     
 @bot.message_handler(commands=["mostrar"])
 def cmd_mostrar(message):
-    bot.send_message(message.chat.id, f"Actualmente mi canal de destino es {bot.get_chat(target).username}\nEl limite de memes diarios es de {limite}\nY los publico cada {tiempo_espera//60} minutos")
+    bot.send_message(message.chat.id, f"Actualmente mi canal de destino es @{bot.get_chat(target).username}\nEl limite de memes diarios es de {limite}\nY los publico cada {tiempo_espera//60} minutos")
     return 
 
 
