@@ -18,8 +18,9 @@ tiempo_espera=(60//round(limite/24))*60
 target=-1001161864648
 
 bot.set_my_commands(
-    telebot.types.BotCommand("limite", "Establece el limite diario de memes"),
-    telebot.types.BotCommand("target", "Establece el canal de destino")
+    telebot.types.BotCommand("limite", "(admin) Establece el limite diario de memes"),
+    telebot.types.BotCommand("target", "(admin )Establece el canal de destino"),
+    telebot.types.BotCommand("mostrar", "Muestra el canal de destino y el tiempo de publicacion")    
 )
 
 def obtener_memes():
@@ -124,6 +125,14 @@ def registrar_canal(message):
         target=canal
         bot.send_message(reima, "Canal agregado exitosamente :)")
         return
+    
+    
+@bot.message_handler(commands=["mostrar"])
+def cmd_mostrar(message):
+    bot.send_message(message.chat.id, f"Actualmente mi canal de destino es {bot.get_chat(target)}\nEl limite de memes diarios es de {limite}\nY los publico cada {tiempo_espera*60} minutos")
+    return 
+
+
 
 app = Flask(__name__)
 
