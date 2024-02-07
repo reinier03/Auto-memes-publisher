@@ -96,7 +96,7 @@ def registrar(message):
         bot.register_next_step_handler(msg, registrar)
     else:
         limite=int(message.text)
-        bot.send_message(reima, f"Entendido!n\n\nSe repartirán los {limite} memes cada {tiempo_espera*60} minutos :D")
+        bot.send_message(reima, f"Entendido!n\n\nSe repartirán los {limite} memes cada {tiempo_espera//60} minutos :D")
         
 
 @bot.message_handler(commands=["target"])
@@ -114,22 +114,22 @@ def registrar_canal(message):
     else:
         canal=message.text
     try:    
-        bot.get_chat(canal)
+        bot.get_chat(canal).id
     except:
-        bot.send_message(reima, "Ni siquiera estoy en el canal!, uneme como admin y prueba de nuevo!")
+        bot.send_message(reima, "Ni siquiera estoy en el canal!, Úneme como admin y prueba de nuevo!")
         return
     if not bot.get_chat_member(canal, bot._user.id).status == 'administrator':
         bot.send_message(reima, "Ni siquiera Soy admin en el canal! Prueba de nuevo cuando lo sea!")
         return
     else:
-        target=canal
+        target=bot.get_chat(canal).id
         bot.send_message(reima, "Canal agregado exitosamente :)")
         return
     
     
 @bot.message_handler(commands=["mostrar"])
 def cmd_mostrar(message):
-    bot.send_message(message.chat.id, f"Actualmente mi canal de destino es {bot.get_chat(target)}\nEl limite de memes diarios es de {limite}\nY los publico cada {tiempo_espera*60} minutos")
+    bot.send_message(message.chat.id, f"Actualmente mi canal de destino es {bot.get_chat(target).username}\nEl limite de memes diarios es de {limite}\nY los publico cada {tiempo_espera//60} minutos")
     return 
 
 
