@@ -17,11 +17,11 @@ limite=72
 tiempo_espera=(60//round(limite/24))*60
 target=-1001161864648
 
-bot.set_my_commands(
+bot.set_my_commands([
     telebot.types.BotCommand("limite", "(admin) Establece el limite diario de memes"),
     telebot.types.BotCommand("target", "(admin )Establece el canal de destino"),
     telebot.types.BotCommand("mostrar", "Muestra el canal de destino y el tiempo de publicacion")    
-)
+])
 
 def obtener_memes():
     global diccionario
