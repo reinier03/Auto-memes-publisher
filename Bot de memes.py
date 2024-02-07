@@ -104,7 +104,7 @@ def cmd_canal_destino(message):
     if not message.chat.id==reima:
         bot.send_message(reima, "No eres mi creador como para decirme qué hacer >:)")
         return
-    msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es {bot.get_chat(target).username}.username\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
+    msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es @{bot.get_chat(target).username}\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
     bot.register_next_step_handler(msg, registrar_canal)
 
 def registrar_canal(message):
