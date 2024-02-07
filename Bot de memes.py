@@ -7,6 +7,7 @@ import threading
 from flask import Flask, request
 
 
+
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
 bot=telebot.TeleBot(os.environ['token'])
 diccionario={}
@@ -16,8 +17,10 @@ limite=72
 tiempo_espera=(60//round(limite/24))*60
 target=-1001161864648
 
-
-
+bot.set_my_commands(
+    telebot.types.BotCommand("limite", "Establece el limite diario de memes"),
+    telebot.types.BotCommand("target", "Establece el canal de destino")
+)
 
 def obtener_memes():
     global diccionario
@@ -80,6 +83,7 @@ if not threading.active_count() > 4:
 @bot.message_handler(commands=["limite"])
 def cmd_limite(message):
     if not message.chat.id==reima:
+        bot.send_message(reima, "No eres mi creador como para decirme qué hacer >:)")
         return
     msg=bot.send_message(reima, "Define un total de memes que se publicarán en el día\n\nYo me ocuparé de distriburlos equitativamente por cada hora", reply_markup=telebot.types.ForceReply())
     bot.register_next_step_handler(msg, registrar)
@@ -94,9 +98,10 @@ def registrar(message):
         bot.send_message(reima, f"Entendido!n\n\nSe repartirán los {limite} memes cada {tiempo_espera*60} minutos :D")
         
 
-@bot.message_handler(commands=["limite"])
+@bot.message_handler(commands=["target"])
 def cmd_canal_destino(message):
     if not message.chat.id==reima:
+        bot.send_message(reima, "No eres mi creador como para decirme qué hacer >:)")
         return
     msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es {bot.get_chat(target)}\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
     bot.register_next_step_handler(msg, registrar_canal)
