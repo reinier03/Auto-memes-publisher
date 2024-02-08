@@ -158,10 +158,9 @@ def cmd_recibir_query(call):
     global hilo
     if call.data=="comenzar":
         global hilo_publicaciones
-        for i in threading.enumerate():
-            if "hilo_memes" in str(i):
-                bot.send_message(reima, "Ya hay un hilo en ejecución! ingresa /detener para detenerlo")
-                return
+        if not "stopped" in str(hilo):
+            bot.send_message(reima, "Ya hay un hilo en ejecución!")
+            return
         else:
             hilo_publicaciones=True
             bot.send_message(reima, "Empezaré a publicar de inmediato :)")
