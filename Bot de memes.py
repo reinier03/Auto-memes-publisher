@@ -7,6 +7,7 @@ import threading
 from flask import Flask, request
 from telebot.types import InlineKeyboardButton
 from telebot.types import InlineKeyboardMarkup
+import dill
 
 
 
@@ -15,12 +16,31 @@ user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/2
 bot=telebot.TeleBot(os.environ["token"])
 diccionario={}
 
+directorio_actual=os.path.dirname(os.path.abspath(__file__))
 reima = 1413725506
 limite=48
 tiempo_espera=round(24*60/limite*60)
 target=-1002056657764
 restantes=1
 hilo_publicaciones=False
+
+bot.send_message(reima, "Estoy Online perra >:D")
+
+if os.path.isfile(f"{directorio_actual}/variables"):
+    with open(f"{directorio_actual}/variables", 'rb') as archivo:
+        variables_cargadas = dill.load(archivo)
+        for key, item in variables_cargadas:
+            globals()[key]=[item]
+            
+            
+def guardar_variables():
+    with open(f"{directorio_actual}/variables", 'wb') as archivo:
+        diccionario={
+            "hilo_publicaciones": hilo_publicaciones
+        }
+        dill.dump(diccionario, archivo)
+    return
+    
 
 bot.set_my_commands([
     telebot.types.BotCommand("start", "Muestra ayuda de este bot"),  
@@ -203,6 +223,12 @@ def cmd_recibir_query(call):
             
         msg=bot.send_message(reima, f"Define el canal al que se le enviarán los memes, por defecto es @{bot.get_chat(target).username}\n\nPasame el @username del nuevo canal :)", reply_markup=telebot.types.ForceReply())
         bot.register_next_step_handler(msg, registrar_canal)
+
+
+if hilo_publicaciones==True:
+    bot.send_message(reima, "Al parecer me pausé pero ahora mismo recuperaré la publicación ;)")
+    hilo=threading.Thread(name="hilo_memes", target=bucle_memes)
+    hilo.start()
 
 
 app = Flask(__name__)
