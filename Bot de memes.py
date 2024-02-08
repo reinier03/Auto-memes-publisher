@@ -16,16 +16,19 @@ user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/2
 bot=telebot.TeleBot(os.environ["token"])
 diccionario={}
 
+
 directorio_actual=os.path.dirname(os.path.abspath(__file__))
 reima = 1413725506
 limite=48
 tiempo_espera=round(24*60/limite*60)
-target=-1002056657764
+target=-1001161864648
 restantes=1
 hilo_publicaciones=False
+hilo=""
 
 bot.send_message(reima, "Estoy Online perra >:D")
 
+breakpoint()
 if os.path.isfile(f"{directorio_actual}/variables"):
     with open(f"{directorio_actual}/variables", 'rb') as archivo:
         variables_cargadas = dill.load(archivo)
@@ -152,6 +155,7 @@ def cmd_panel_admin(message):
 
 @bot.callback_query_handler(func=lambda x: True)
 def cmd_recibir_query(call):
+    global hilo
     if call.data=="comenzar":
         global hilo_publicaciones
         for i in threading.enumerate():
@@ -163,18 +167,28 @@ def cmd_recibir_query(call):
             bot.send_message(reima, "Empezaré a publicar de inmediato :)")
             hilo=threading.Thread(name="hilo_memes", target=bucle_memes)
             hilo.start()
+            guardar_variables()
             return
         
 
     elif call.data=="detener":
-        for i in threading.enumerate():
-            if "hilo_memes" in str(i):
-                hilo_publicaciones=False
-                bot.send_message(reima, "Hilo detenido exitosamente :)")
-                return hilo_publicaciones
-        else:
+        if hilo_publicaciones==False:
             bot.send_message(reima, "No hay ningún hilo para detener.\nIngresa /comenzar para crear uno!")
-            return 
+            return
+        else:
+            def detener():
+                global hilo
+                global hilo_publicaciones
+                
+                hilo_publicaciones=False
+                bot.send_message(reima, "Voy a detener el hilo")
+                while not "stopped" in str(hilo):
+
+                    time.sleep(1)
+                bot.send_message(reima, "Hilo detenido exitosamente :D")
+                guardar_variables()
+                return 
+            detener()
         
         
         
