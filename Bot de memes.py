@@ -28,7 +28,7 @@ hilo=""
 
 bot.send_message(reima, "Estoy Online perra >:D")
 
-breakpoint()
+
 if os.path.isfile(f"{directorio_actual}/variables"):
     with open(f"{directorio_actual}/variables", 'rb') as archivo:
         variables_cargadas = dill.load(archivo)
