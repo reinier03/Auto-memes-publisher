@@ -163,6 +163,7 @@ def cmd_recibir_query(call):
             return
         else:
             hilo_publicaciones=True
+            guardar_variables()
             bot.send_message(reima, "Empezaré a publicar de inmediato :)")
             hilo=threading.Thread(name="hilo_memes", target=bucle_memes)
             hilo.start()
@@ -173,6 +174,7 @@ def cmd_recibir_query(call):
         if hilo_publicaciones==False and not "stopped" in str(hilo):
             hilo_publicaciones=False
             bot.send_message(reima, "El hilo se va a detener en la proxima vuelta de bucle :v\n\nEspera hasta entonces")
+            
             return
         elif hilo_publicaciones==False and "stopped" in str(hilo):
             bot.send_message(reima, "No hay ningún hilo en ejecución")
@@ -184,6 +186,7 @@ def cmd_recibir_query(call):
                 
                 hilo_publicaciones=False
                 bot.send_message(reima, "El hilo se va a detener en la proxima vuelta de bucle :v\n\nEspera hasta entonces")
+                guardar_variables()
                 return 
             detener()
         
