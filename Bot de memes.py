@@ -112,10 +112,10 @@ def publicar(diccionario, user):
             
 
 def bucle_memes():
-    while hilo_publicaciones==True:
+    while hilo_publicaciones:
         obtener_memes()
         publicar(diccionario, user)
-    return
+    return bot.send_message(reima, "<u>ADVERTENCIA:</u>\nEl bucle de memes se ha detenido!", parse_mode="html", disable_notification=False)
     
               
 #------------------------------COMANDOS PUBLICOS----------------------------------
@@ -158,7 +158,7 @@ def cmd_recibir_query(call):
     global hilo
     if call.data=="comenzar":
         global hilo_publicaciones
-        if not "stopped" in str(hilo):
+        if hilo and not "stopped" in str(hilo):
             bot.send_message(reima, "Ya hay un hilo en ejecución!")
             return
         else:
@@ -166,13 +166,16 @@ def cmd_recibir_query(call):
             bot.send_message(reima, "Empezaré a publicar de inmediato :)")
             hilo=threading.Thread(name="hilo_memes", target=bucle_memes)
             hilo.start()
-            guardar_variables()
             return
         
 
     elif call.data=="detener":
-        if hilo_publicaciones==False:
-            bot.send_message(reima, "No hay ningún hilo para detener.\nIngresa /comenzar para crear uno!")
+        if hilo_publicaciones==False and not "stopped" in str(hilo):
+            hilo_publicaciones=False
+            bot.send_message(reima, "El hilo se va a detener en la proxima vuelta de bucle :v\n\nEspera hasta entonces")
+            return
+        elif hilo_publicaciones==False and "stopped" in str(hilo):
+            bot.send_message(reima, "No hay ningún hilo en ejecución")
             return
         else:
             def detener():
@@ -180,12 +183,7 @@ def cmd_recibir_query(call):
                 global hilo_publicaciones
                 
                 hilo_publicaciones=False
-                bot.send_message(reima, "Voy a detener el hilo")
-                while not "stopped" in str(hilo):
-
-                    time.sleep(1)
-                bot.send_message(reima, "Hilo detenido exitosamente :D")
-                guardar_variables()
+                bot.send_message(reima, "El hilo se va a detener en la proxima vuelta de bucle :v\n\nEspera hasta entonces")
                 return 
             detener()
         
