@@ -106,14 +106,16 @@ def publicar(diccionario, user):
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
         restantes=len(diccionario)-e
-        print(f"Ya publiqué, procedo a dormir {time.strftime('%H:%M', time.localtime())}")
+        bot.send_message(reima, f"Ya publiqué el {e} meme, procedo a dormir {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
         time.sleep(tiempo_espera)
     return
             
 
 def bucle_memes():
     while hilo_publicaciones:
+        bot.send_message(reima, f"Voy a obtener memes ahora {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
         obtener_memes()
+        bot.send_message(reima, f"Voy a publicar memes ahora {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
         publicar(diccionario, user)
     return bot.send_message(reima, "<u>ADVERTENCIA:</u>\nEl bucle de memes se ha detenido!", parse_mode="html", disable_notification=False)
     
@@ -245,27 +247,29 @@ if hilo_publicaciones==True:
     hilo.start()
 
 
-app = Flask(__name__)
+try:
+    request.host_url
+except:
+    app = Flask(__name__)
 
-@app.route('/', methods=['GET'])
-def index():
-    host_url = request.host_url
-    return f'¡Hola! Esta es la dirección local del host: {host_url}'
+    @app.route('/', methods=['GET'])
+    def index():
+        host_url = request.host_url
+        return f'¡Hola! Esta es la dirección local del host: {host_url}'
 
-def flask():
-    bot.remove_webhook()
-    time.sleep(1)
-    app.run(host="0.0.0.0", port=5000)
+    def flask():
+        bot.remove_webhook()
+        time.sleep(1)
+        app.run(host="0.0.0.0", port=5000)
 
 
-for i in threading.enumerate():
-    if "hilo_flask" in str(i):
-        break
-else:
+try:
+    request.host_url
+except:
     hilo_flask=threading.Thread(name="hilo_flask", target=flask)
     hilo_flask.start()
 
-bot.polling()
+bot.infinity_polling()
     
     
     
