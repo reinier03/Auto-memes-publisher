@@ -106,16 +106,16 @@ def publicar(diccionario, user):
         archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
         restantes=len(diccionario)-e
-        bot.send_message(reima, f"Ya publiqué el {e} meme, procedo a dormir {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
+        bot.send_message(reima, f"Ya publiqué el {e} meme, procedo a dormir")
         time.sleep(tiempo_espera)
     return
             
 
 def bucle_memes():
     while hilo_publicaciones:
-        bot.send_message(reima, f"Voy a obtener memes ahora {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
+        bot.send_message(reima, f"Voy a obtener memes ahora")
         obtener_memes()
-        bot.send_message(reima, f"Voy a publicar memes ahora {time.strftime('%H:%M', time.gmtime(time.mktime(time.gmtime())-36000.0))}")
+        bot.send_message(reima, f"Voy a publicar memes ahora")
         publicar(diccionario, user)
     return bot.send_message(reima, "<u>ADVERTENCIA:</u>\nEl bucle de memes se ha detenido!", parse_mode="html", disable_notification=False)
     
