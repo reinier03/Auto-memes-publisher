@@ -21,25 +21,30 @@ directorio_actual=os.path.dirname(os.path.abspath(__file__))
 reima = 1413725506
 limite=48
 tiempo_espera=round(24*60/limite*60)
-target=-1001161864648
+target=-1002056657764
 restantes=1
 hilo_publicaciones=False
 hilo=""
+OS="\\"
+if not os.name=="nt":
+    OS="/"
 
 bot.send_message(reima, "Estoy Online perra >:D")
 
-
-if os.path.isfile(f"{directorio_actual}/variables"):
-    with open(f"{directorio_actual}/variables", 'rb') as archivo:
+if os.path.isfile(f"{directorio_actual}{OS}variables"):
+    with open(f"{directorio_actual}{OS}variables", 'rb') as archivo:
         variables_cargadas = dill.load(archivo)
-        for key, item in variables_cargadas:
-            globals()[key]=[item]
+        for key, item in variables_cargadas.items():
+            globals()[key]=item
+    tiempo_espera=round(24*60/limite*60)
             
             
 def guardar_variables():
-    with open(f"{directorio_actual}/variables", 'wb') as archivo:
+    with open(f"{directorio_actual}{OS}variables", 'wb') as archivo:
         diccionario={
-            "hilo_publicaciones": hilo_publicaciones
+            "hilo_publicaciones": hilo_publicaciones,
+            "target" : target,
+            "limite" : limite
         }
         dill.dump(diccionario, archivo)
     return
@@ -117,19 +122,14 @@ def bucle_memes():
         obtener_memes()
         bot.send_message(reima, f"Voy a publicar memes ahora")
         publicar(diccionario, user)
-    return bot.send_message(reima, "<u>ADVERTENCIA:</u>\nEl bucle de memes se ha detenido!", parse_mode="html", disable_notification=False)
+    return bot.send_message(reima, "<u>ADVERTENCIA:</u>\n¡El bucle de memes se ha detenido!", parse_mode="html", disable_notification=False)
     
               
 #------------------------------COMANDOS PUBLICOS----------------------------------
 
 @bot.message_handler(commands=["start"])
 def cmd_start(message):
-    bot.send_message(message.chat.id, """
-                     Lo siento pero no estoy diseñado para ser usado :(
-                     Solo puedes acceder a la informacion de la publicacion de memes en el/los canales en los que publico pero no puedes interactuar conmigo 
-                     
-                     /mostrar para ver la información
-                     """)
+    bot.send_message(message.chat.id, "Lo siento pero no estoy diseñado para ser usado :(\nSolo puedes acceder a la informacion de la publicacion de memes en el/los canales en los que publico pero no puedes interactuar conmigo\n\n/mostrar para ver la información")
 
 
 @bot.message_handler(commands=["mostrar"])
@@ -245,7 +245,8 @@ if hilo_publicaciones==True:
     bot.send_message(reima, "Al parecer me pausé pero ahora mismo recuperaré la publicación ;)")
     hilo=threading.Thread(name="hilo_memes", target=bucle_memes)
     hilo.start()
-
+    
+#Inicializar Flask
 
 try:
     request.host_url
@@ -257,11 +258,10 @@ except:
         host_url = request.host_url
         return f'¡Hola! Esta es la dirección local del host: {host_url}'
 
-    def flask():
-        bot.remove_webhook()
-        time.sleep(1)
-        app.run(host="0.0.0.0", port=5000)
-
+def flask():
+    bot.remove_webhook()
+    time.sleep(1)
+    app.run(host="0.0.0.0", port=5000)
 
 try:
     request.host_url
