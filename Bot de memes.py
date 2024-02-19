@@ -19,9 +19,11 @@ diccionario={}
 
 
 directorio_actual=os.path.dirname(os.path.abspath(__file__))
+contador=1
 reima = 1413725506
 limite=72
 tiempo_espera=round(24*60/limite*60)
+#-1002056657764     <= PRueba
 #-1001161864648     <=  Last HOPE
 target=-1001161864648  
 restantes=1
@@ -68,32 +70,32 @@ def obtener_memes():
     def memedroid():
         global diccionario_memedroid
         global user
+        global contador
         limite_memedroid=0
-        contador=0
         limite_memedroid=int(limite/2)
-        while not len(diccionario_memedroid)>=limite_memedroid:
-            contador+=1
-            res=requests.get(f"https://es.memedroid.com/memes/tag/humor%20negro?page={contador}", headers=user)
-            soup=bs(res.text, features="html.parser")
-            articulos=soup.find_all("article", class_="gallery-item")
-            for e, i in enumerate(articulos, start=len(diccionario_memedroid)+1):
+        res=requests.get(f"https://es.memedroid.com/memes/random?page={contador}", headers=user)
+        soup=bs(res.text, features="html.parser")
+        articulos=soup.find_all("article", class_="gallery-item")
+        for e, i in enumerate(articulos, start=len(diccionario_memedroid)+1):
+            try:
+                imagen=i.find("img", class_="img-responsive grey-background").attrs.get("src")
+                texto=i.find("a", class_="item-header-title dyn-link").text
+                diccionario_memedroid[e]=[imagen, texto]
+                if len(diccionario_memedroid)>= limite_memedroid:
+                    break
+            except:
                 try:
-                    imagen=i.find("img", class_="img-responsive grey-background").attrs.get("src")
+                    video=i.find("video", class_="item-video gallery-item-video grey-background").find("source").attrs.get("src")
                     texto=i.find("a", class_="item-header-title dyn-link").text
-                    diccionario_memedroid[e]=[imagen, texto]
+                    diccionario_memedroid[e]=[video, texto]
                     if len(diccionario_memedroid)>= limite_memedroid:
                         break
                 except:
-                    try:
-                        video=i.find("video", class_="item-video gallery-item-video grey-background").find("source").attrs.get("src")
-                        texto=i.find("a", class_="item-header-title dyn-link").text
-                        diccionario_memedroid[e]=[video, texto]
-                        if len(diccionario_memedroid)>= limite_memedroid:
-                            break
-                    except:
-                        bot.send_message(reima, f"Ha ocurrido un error obteniendo memes de memedroid:\n\n{e}")
-                        continue
-        print("Memedroid completado")
+                    bot.send_message(reima, f"Ha ocurrido un error obteniendo memes de memedroid:\n\n{e}")
+                    continue
+        if not len(diccionario_memedroid)>= limite_memedroid:
+            contador+=1
+            return memedroid()
         return
                     
     #Cuantarazon
@@ -103,6 +105,7 @@ def obtener_memes():
         limite_cuantarazon=0
         limite_cuantarazon=limite-len(diccionario_memedroid)
         while not len(diccionario_cuantarazon)>=limite_cuantarazon:
+            time.sleep(1)
             res=requests.get("https://www.cuantarazon.com/aleatorio", headers=user)
             soup=bs(res.text, features="html.parser")
             articulos=soup.find_all("div", class_="box story")
@@ -146,25 +149,26 @@ def publicar(diccionario, user):
         if hilo_publicaciones==False:
             return
         res=requests.get(diccionario[e][0], headers=user)
-        
         with open(f"{os.path.basename(diccionario[e][0])}", "wb") as archivo_escritura:
             archivo_escritura.write(res.content)
             
-        archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
+        #archivo_lectura=open(f"{os.path.basename(diccionario[e][0])}", "rb")
         try:
             if os.path.basename(diccionario[e][0]).split('.')[-1] == "jpeg":
-                bot.send_photo(target, photo=archivo_lectura , caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
+                bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb") , caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
                 #bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb"), caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
             elif os.path.basename(diccionario[e][0]).split('.')[-1] == "jpg":
-                bot.send_photo(target, photo=archivo_lectura , caption=f"{diccionario[e][1]}\n\n#cuantarazon\n\n@LastHopePosting", timeout=60)
+                bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb") , caption=f"{diccionario[e][1]}\n\n#cuantarazon\n\n@LastHopePosting", timeout=60)
                 
             else:
                 bot.send_document(target, document=open(f"{os.path.basename(diccionario[e][0])}", "rb"), caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
                 
-        except Exception as e:
-            bot.send_message(reima, f"Ha ocurrido un error al mandar un archivo:\n\n{e}\n\nNombre del archivo: {os.path.basename(diccionario[e][0])}")
+        except Exception as ex:
+            try:
+                bot.send_message(reima, f"Ha ocurrido un error al mandar un archivo:\n\n{e}\n\nNombre del archivo: {os.path.basename(diccionario[e][0])}")
+            except:
+                continue
                     
-        archivo_lectura.close()
         os.remove(os.path.basename(diccionario[e][0]))
         restantes=len(diccionario)-e
         bot.send_message(reima, f"Ya publiqué el {e} meme, procedo a dormir")
