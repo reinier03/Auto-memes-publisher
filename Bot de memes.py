@@ -26,7 +26,7 @@ tiempo_espera=round(24*60/limite*60)
 #-1002056657764     <= PRueba
 #-1001161864648     <=  Last HOPE
 target=-1001161864648  
-restantes=1
+restantes="Aún no se ha iniciado las publicaciones"
 hilo_publicaciones=False
 hilo=""
 OS="\\"
@@ -196,6 +196,7 @@ def cmd_start(message):
 def cmd_mostrar(message):
     global limite
     global target
+    global restantes
     bot.send_message(message.chat.id, f"Actualmente mi canal de destino es @{bot.get_chat(target).username}\nEl limite de memes diarios es de {limite}\nLos publico cada {tiempo_espera//60} minutos\nY me faltan por publicar {restantes} memes")
     return 
 
@@ -320,6 +321,7 @@ except:
     @app.route('/', methods=['GET'])
     def index():
         host_url = request.host_url
+        print("Me han hecho una solicitud http :)")
         return f'¡Hola! Esta es la dirección local del host: {host_url}'
 
 def flask():
