@@ -1,3 +1,6 @@
+
+#En esta rama se obtendrán los memes cada 1 hora
+
 import os
 import requests
 from bs4 import BeautifulSoup as bs
@@ -13,25 +16,31 @@ import dill
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
-
-bot=telebot.TeleBot(os.environ["token"])
+# Bot de prueba =>     5818205719:AAHk-liE0DD4S5ltg-kFN88Ckn4CTBUmMNc
+#bot=telebot.TeleBot(os.environ["token"])
+bot=telebot.TeleBot("5818205719:AAHk-liE0DD4S5ltg-kFN88Ckn4CTBUmMNc")
 diccionario={}
 
-
+#-------------Constantes--------------
 directorio_actual=os.path.dirname(os.path.abspath(__file__))
 contador=1
 reima = 1413725506
-limite=72
+limite=48
 tiempo_espera=round(24*60/limite*60)
 #-1002056657764     <= PRueba
 #-1001161864648     <=  Last HOPE
-target=-1001161864648  
+target=-1002056657764  
 restantes="Aún no se ha iniciado las publicaciones"
 hilo_publicaciones=False
 hilo=""
 OS="\\"
 diccionario_memedroid={}
 diccionario_cuantarazon={}
+memes_por_hora=round(60/(24*60/limite))
+
+#-------------$Constantes--------------
+
+
 if not os.name=="nt":
     OS="/"
 
@@ -50,7 +59,8 @@ def guardar_variables():
         diccionario={
             "hilo_publicaciones": hilo_publicaciones,
             "target" : target,
-            "limite" : limite
+            "limite" : limite,
+            "memes_por_hora": memes_por_hora
         }
         dill.dump(diccionario, archivo)
     return
@@ -72,7 +82,9 @@ def obtener_memes():
         global user
         global contador
         limite_memedroid=0
-        limite_memedroid=int(limite/2)
+        limite_memedroid=int(memes_por_hora/2)
+        if limite_memedroid==0:
+            return
         res=requests.get(f"https://es.memedroid.com/memes/random?page={contador}", headers=user)
         soup=bs(res.text, features="html.parser")
         articulos=soup.find_all("article", class_="gallery-item")
@@ -103,7 +115,7 @@ def obtener_memes():
         global diccionario_cuantarazon
         global user
         limite_cuantarazon=0
-        limite_cuantarazon=limite-len(diccionario_memedroid)
+        limite_cuantarazon=memes_por_hora-len(diccionario_memedroid)
         while not len(diccionario_cuantarazon)>=limite_cuantarazon:
             time.sleep(1)
             res=requests.get("https://www.cuantarazon.com/aleatorio", headers=user)
@@ -165,7 +177,7 @@ def publicar(diccionario, user):
                 
         except Exception as ex:
             try:
-                bot.send_message(reima, f"Ha ocurrido un error al mandar un archivo:\n\n{e}\n\nNombre del archivo: {os.path.basename(diccionario[e][0])}")
+                bot.send_message(reima, f"Ha ocurrido un error al mandar un archivo:\n\n{e}\n\nNombre del archivo: {os.path.basename(diccionario[e][0])}\nEnlace: {diccionario[e][0]}")
             except:
                 continue
                     
@@ -269,6 +281,7 @@ def cmd_recibir_query(call):
             else:
                 limite=int(message.text)
                 tiempo_espera=round(24*60/limite*60)
+                memes_por_hora=round(60/(24*60/limite))
                 guardar_variables()
                 return bot.send_message(reima, f"Entendido!\n\nSe repartirán los {limite} memes cada {tiempo_espera//60} minutos :D")
         
