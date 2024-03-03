@@ -17,8 +17,7 @@ import dill
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
 # Bot de prueba =>     5818205719:AAHk-liE0DD4S5ltg-kFN88Ckn4CTBUmMNc
-#bot=telebot.TeleBot(os.environ["token"])
-bot=telebot.TeleBot("5818205719:AAHk-liE0DD4S5ltg-kFN88Ckn4CTBUmMNc")
+bot=telebot.TeleBot(os.environ["token"])
 diccionario={}
 
 #-------------Constantes--------------
@@ -29,7 +28,7 @@ limite=48
 tiempo_espera=round(24*60/limite*60)
 #-1002056657764     <= PRueba
 #-1001161864648     <=  Last HOPE
-target=-1002056657764  
+target=-1001161864648 
 restantes="Aún no se ha iniciado las publicaciones"
 hilo_publicaciones=False
 hilo=""
@@ -138,14 +137,14 @@ def obtener_memes():
     memedroid()
     cuantarazon()
     contador=1
-    while not len(diccionario)==limite:
+    while not len(diccionario)==memes_por_hora:
         try:
             diccionario[len(diccionario)+1]=[diccionario_cuantarazon[contador][0], diccionario_cuantarazon[contador][1]]
-            if len(diccionario)>=limite:
+            if len(diccionario)>=memes_por_hora:
                 break
             diccionario[len(diccionario)+1]=[diccionario_memedroid[contador][0], diccionario_memedroid[contador][1]]
-        except Exception as e:
-            bot.send_message(reima, f"Ha ocurrido un error mientras se mezclaban los diccionarios: {e}")
+        except Exception as ex:
+            bot.send_message(reima, f"Ha ocurrido un error mientras se mezclaban los diccionarios: {ex}")
         contador+=1
     return
                 
@@ -223,6 +222,7 @@ def cmd_panel_admin(message):
     panel_control=InlineKeyboardMarkup(row_width=1)
     panel_control.add(InlineKeyboardButton("Crear hilo ✨", callback_data="comenzar"))
     panel_control.add(InlineKeyboardButton("Detener hilo 🖐", callback_data="detener"))
+    panel_control.add(InlineKeyboardButton("Mostrar lista de elementos 👀", callback_data="lista"))
     panel_control.add(InlineKeyboardButton("Limite de memes 🛑", callback_data="limite"))
     panel_control.add(InlineKeyboardButton("Canal target 🎯", callback_data="target"))
     bot.send_message(reima, "Bienvenido Reima ;)\nEn que te puedo ayudar?", reply_markup=panel_control)
@@ -265,16 +265,25 @@ def cmd_recibir_query(call):
                 return 
             detener()
         
-        
+    elif call.data=="lista":
+        global diccionario
+        bot.send_message(reima, f"Hay {len(diccionario_memedroid)} de memedroid y {len(diccionario_cuantarazon)} de cuantarazon. A continuacion todos los memes de la lista:")
+        texto=""
+        for e,i in enumerate(diccionario, start=1):
+            texto+=f"ID: {e} Título: {diccionario[e][1]}\nEnlace: {diccionario[e][0]}\n\n"
+            
+        bot.send_message(reima, texto, disable_web_page_preview=True)    
         
     elif call.data=="limite":
         global limite
         global tiempo_espera
+        global memes_por_hora
         msg=bot.send_message(reima, "Define un total de memes que se publicarán en el día\n\nYo me ocuparé de distriburlos equitativamente por cada hora", reply_markup=telebot.types.ForceReply())
         
         def registrar(message):
             global limite
             global tiempo_espera
+            global memes_por_hora
             if not message.text.isdigit():
                 msg=bot.send_message(reima, "Tiene que ser un valor numérico!")
                 return bot.register_next_step_handler(msg, registrar)
