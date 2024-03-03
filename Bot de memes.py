@@ -272,7 +272,10 @@ def cmd_recibir_query(call):
         for e,i in enumerate(diccionario, start=1):
             texto+=f"ID: {e} Título: {diccionario[e][1]}\nEnlace: {diccionario[e][0]}\n\n"
             
-        bot.send_message(reima, texto, disable_web_page_preview=True)    
+        try:
+            bot.send_message(reima, texto, disable_web_page_preview=True)
+        except Exception as ex:
+            bot.send_message(reima, f"Ha ocurrido un error: {ex}")  
         
     elif call.data=="limite":
         global limite
