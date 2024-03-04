@@ -64,6 +64,8 @@ bot.set_my_commands([
 
 def obtener_memes():
     global diccionario
+    global diccionario_memedroid
+    global diccionario_cuantarazon
     
     #-----------------------Paginas de memes------------------------------
     #memedroid
@@ -71,7 +73,6 @@ def obtener_memes():
         global diccionario_memedroid
         global user
         global contador
-        global diccionario_cuantarazon
         
         limite_memedroid=0
         limite_memedroid=int(limite/2)
@@ -104,6 +105,7 @@ def obtener_memes():
     def cuantarazon():
         global diccionario_cuantarazon
         global user
+        
         limite_cuantarazon=0
         limite_cuantarazon=limite-len(diccionario_memedroid)
         while not len(diccionario_cuantarazon)>=limite_cuantarazon:
@@ -128,6 +130,7 @@ def obtener_memes():
     diccionario.clear()
     diccionario_cuantarazon.clear()
     diccionario_memedroid.clear()
+    #A continuacion busco más memes
     memedroid()
     cuantarazon()
     contador=1
