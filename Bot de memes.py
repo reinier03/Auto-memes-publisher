@@ -166,7 +166,7 @@ def publicar(diccionario, user):
                 bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb") , caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
                 #bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb"), caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
             elif os.path.basename(diccionario[e][0]).split('.')[-1] == "jpg":
-                bot.send_photo(target, photo=open(f"{os.path.basename(diccionario[e][0])}", "rb") , caption=f"{diccionario[e][1]}\n\n#cuantarazon\n\n@LastHopePosting", timeout=60)
+                bot.send_document(target, document=open(f"{os.path.basename(diccionario[e][0])}", "rb") , caption=f"{diccionario[e][1]}\n\n#cuantarazon\n\n@LastHopePosting", timeout=60)
                 
             else:
                 bot.send_document(target, document=open(f"{os.path.basename(diccionario[e][0])}", "rb"), caption=f"{diccionario[e][1]}\n\n@LastHopePosting", timeout=60)
