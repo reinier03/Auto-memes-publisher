@@ -71,6 +71,8 @@ def obtener_memes():
         global diccionario_memedroid
         global user
         global contador
+        global diccionario_cuantarazon
+        
         limite_memedroid=0
         limite_memedroid=int(limite/2)
         res=requests.get(f"https://es.memedroid.com/memes/random?page={contador}", headers=user)
@@ -122,7 +124,10 @@ def obtener_memes():
         print("Cuantarazon completado")
         return
                 
+    #Limpiaré los diccionarios
     diccionario.clear()
+    diccionario_cuantarazon.clear()
+    diccionario_memedroid.clear()
     memedroid()
     cuantarazon()
     contador=1
