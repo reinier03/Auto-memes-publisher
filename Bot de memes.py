@@ -1,6 +1,3 @@
-
-#En esta rama se obtendrán los memes cada 1 hora
-
 import os
 import requests
 from bs4 import BeautifulSoup as bs
@@ -12,7 +9,7 @@ from telebot.types import InlineKeyboardButton
 from telebot.types import InlineKeyboardMarkup
 import dill
 
-
+#EN esta rama se obtendrán memes cada 1 hora
 
 
 user={"user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0"}
@@ -73,6 +70,8 @@ bot.set_my_commands([
 
 def obtener_memes():
     global diccionario
+    global diccionario_memedroid
+    global diccionario_cuantarazon
     
     #-----------------------Paginas de memes------------------------------
     #memedroid
@@ -134,6 +133,8 @@ def obtener_memes():
         return
                 
     diccionario.clear()
+    diccionario_cuantarazon.clear()
+    diccionario_memedroid.clear()
     memedroid()
     cuantarazon()
     contador=1
