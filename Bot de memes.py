@@ -219,6 +219,7 @@ def cmd_panel_admin(message):
     panel_control=InlineKeyboardMarkup(row_width=1)
     panel_control.add(InlineKeyboardButton("Crear hilo ✨", callback_data="comenzar"))
     panel_control.add(InlineKeyboardButton("Detener hilo 🖐", callback_data="detener"))
+    panel_control.add(InlineKeyboardButton("Mostrar lista de elementos 👀", callback_data="lista"))
     panel_control.add(InlineKeyboardButton("Limite de memes 🛑", callback_data="limite"))
     panel_control.add(InlineKeyboardButton("Canal target 🎯", callback_data="target"))
     bot.send_message(reima, "Bienvenido Reima ;)\nEn que te puedo ayudar?", reply_markup=panel_control)
@@ -261,7 +262,17 @@ def cmd_recibir_query(call):
                 return 
             detener()
         
-        
+    elif call.data=="lista":
+        global diccionario
+        bot.send_message(reima, f"Hay {len(diccionario_memedroid)} de memedroid y {len(diccionario_cuantarazon)} de cuantarazon. A continuacion todos los memes de la lista:")
+        texto=""
+        for e,i in enumerate(diccionario, start=1):
+            texto+=f"ID: {e} Título: {diccionario[e][1]}\nEnlace: {diccionario[e][0]}\n\n"
+            
+        try:
+            bot.send_message(reima, texto, disable_web_page_preview=True)
+        except Exception as ex:
+            bot.send_message(reima, f"Ha ocurrido un error: {ex}") 
         
     elif call.data=="limite":
         global limite
