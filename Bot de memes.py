@@ -131,10 +131,10 @@ def obtener_memes():
 
         print("Cuantarazon completado")
         return
-                
-    diccionario.clear()
+    #Limpiaré los diccionarios
     diccionario_cuantarazon.clear()
     diccionario_memedroid.clear()
+    diccionario.clear()
     memedroid()
     cuantarazon()
     contador=1
