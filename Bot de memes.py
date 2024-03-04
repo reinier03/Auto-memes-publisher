@@ -73,6 +73,8 @@ bot.set_my_commands([
 
 def obtener_memes():
     global diccionario
+    global diccionario_cuantarazon
+    global diccionario_memedroid
     
     #-----------------------Paginas de memes------------------------------
     #memedroid
@@ -132,8 +134,11 @@ def obtener_memes():
 
         print("Cuantarazon completado")
         return
-                
+    #Limpiaré los diccionarios
+    diccionario_cuantarazon.clear()
+    diccionario_memedroid.clear()
     diccionario.clear()
+    #ahora obtendré nuevos memes
     memedroid()
     cuantarazon()
     contador=1
